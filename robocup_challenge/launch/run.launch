@@ -1,3 +1,0 @@
-<launch>
-  <node pkg="robocup_challenge" type="move.py" name="move" output="screen" required="true" />
-</launch>
