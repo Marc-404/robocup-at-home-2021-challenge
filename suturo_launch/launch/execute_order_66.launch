@@ -1,0 +1,19 @@
+<launch>
+    <include file="$(find suturo_bringup)/launch/robocup_bringup.launch" />
+    
+    <include file="$(find suturo_navigation_launch)/launch/start_suturo_navigation.launch" >
+        <arg name="run_object_finder" value="true"/>
+        <arg name="run_nav_fix" value="false"/>
+        <arg name="run_path_planner" value="true"/>
+    </include>
+    
+    <include file="$(find suturo_manipulation)/launch/start_manipulation.launch" />
+    
+    <include file="$(find suturo_perception)/launch/hsrb_perception.launch" />
+    
+    <include file="$(find suturo_knowledge)/launch/knowledge.launch" />
+    
+    <include file="$(find suturo_nlg)/launch/suturo_nlg.launch" />
+    
+    <node pkg="cleanup_demo" type="execute-cleanup" name="cleanup-imperator" />
+</launch>

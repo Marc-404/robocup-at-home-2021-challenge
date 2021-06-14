@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>suturo_launch</name>
+  <version>0.0.0</version>
+  <description>Launch evrything from the suturo group for the robocup 2021</description>
+
+  <maintainer email="marc@todo.todo">marc</maintainer>
+
+
+  <license>TODO</license>
+
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>
