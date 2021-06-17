@@ -33,18 +33,23 @@ RUN pip3 install simplenlg http://www.jbox.dk/sling/sling-2.0.0-py3-none-linux_x
 #install caffe
 #RUN apt install -y caffe-cpu
 
-#RUN mkdir /caffe && cd /caffe && \
-#    wget -q -O caffe.zip https://github.com/BVLC/caffe/archive/master.zip && \
-#    unzip -qq caffe.zip && \
-#    rm caffe.zip && \
-#    cd caffe-master && \
-#    wget -q -O Makefile.config https://raw.githubusercontent.com/SUTURO/suturo_ci/master/setup/caffe/Makefile.config && \
-#    mkdir build && cd build && \
-#    cmake .. >> ../../cmake_output && \
-#    make -j all >> ../../make_output
+RUN mkdir /caffe && cd /caffe && \
+    wget -q -O caffe.zip https://github.com/BVLC/caffe/archive/master.zip && \
+    unzip -qq caffe.zip && \
+    rm caffe.zip && \
+    cd caffe-master && \
+    wget -q -O Makefile.config https://raw.githubusercontent.com/SUTURO/suturo_ci/master/setup/caffe/Makefile.config && \
+    mkdir build && cd build && \
+    cmake .. >> ../../cmake_output && \  
+    #wget -q -O CaffeConfig.cmake https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/CaffeConfig.cmake && \
+    wget -q -O cmake_install.cmake https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/cmake_install.cmake && \
+    make -j all >> ../../make_output && \
+    make install
 
 
 # install opencv
+#RUN apt update
+RUN apt install -y python3-opencv
 #RUN mkdir /opencv && cd /opencv && \
 #    wget -q -O opencv4_5_1.tar.gz https://github.com/opencv/opencv/archive/4.5.1.tar.gz && \
 #    wget -q -O opencv_contrib_4_5_1.tar.gz https://github.com/opencv/opencv_contrib/archive/4.5.1.tar.gz && \
@@ -54,7 +59,8 @@ RUN pip3 install simplenlg http://www.jbox.dk/sling/sling-2.0.0-py3-none-linux_x
 #    cd opencv-4.5.1 && \
 #    mkdir build && cd build && \
 #    cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.5.1/modules .. >> ../../cmake_output && \
-#    make -j$(nproc) >> ../../make_output
+#    make -j$(nproc) >> ../../make_output && \
+#    make install
 
 
 # create workspace folder
