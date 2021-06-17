@@ -11,9 +11,7 @@
     
     <include file="$(find suturo_perception)/launch/hsrb_perception.launch" />
     
-    <include file="$(find suturo_knowledge)/launch/knowledge.launch" />
-    
-    <include file="$(find suturo_nlg)/launch/suturo_nlg.launch" />
+    <include file="$(find knowledge)/launch/knowledge.launch" />
     
     <node pkg="cleanup_demo" type="execute-cleanup" name="cleanup-imperator" />
 </launch>
