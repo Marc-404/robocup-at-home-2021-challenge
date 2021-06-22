@@ -27,12 +27,22 @@ RUN apt install -y wget git python-pip python3-pip tree
 RUN apt install -y python-rosinstall
 RUN apt install -y python-wstool
 RUN apt install -y python-catkin-tools
-RUN apt-get update && apt-get install -y cmake g++ unzip libboost-all-dev libopenblas-dev libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler the python-dev libgflags-dev libgoogle-glog-dev liblmdb-dev python-pip ros-melodic-desktop-full python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-melodic-roslisp-repl rapidjson-dev automake libxerces-c-dev libicu-dev libapr1-dev mongodb-org openjdk-8-jdk libatlas-base-dev liblapack-dev libblas-dev libmongoclient-dev libgoogle-perftools4 libpcap0.8 libstemmer0d libtcmalloc-minimal4 libeigen3-dev libmongoc-dev swi-prolog libjson-glib-dev libjson-glib-1.0-0 ros-melodic-roslisp
+RUN apt-get update && apt-get install -y cmake g++ unzip libboost-all-dev \
+    libopenblas-dev libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev \
+    libhdf5-serial-dev protobuf-compiler the python-dev libgflags-dev \
+    libgoogle-glog-dev liblmdb-dev python-pip ros-melodic-desktop-full \
+    python-rosdep python-rosinstall python-rosinstall-generator python-wstool \
+    build-essential python-rosdep ros-melodic-roslisp-repl rapidjson-dev \
+    automake libxerces-c-dev libicu-dev libapr1-dev mongodb-org openjdk-8-jdk \
+    libatlas-base-dev liblapack-dev libblas-dev libmongoclient-dev \
+    libgoogle-perftools4 libpcap0.8 libstemmer0d libtcmalloc-minimal4 \
+    libeigen3-dev libmongoc-dev swi-prolog libjson-glib-dev libjson-glib-1.0-0 \
+    ros-melodic-roslisp*
 
+RUN sudo mkdir -p /data/db /data/configdb &&\
+    sudo chown -R mongodb:mongodb /data/db /data/configdb
 
 RUN pip install future protobuf pybullet==3.0.6 scipy==1.2.2 casadi sortedcontainers hypothesis==4.34.0 pandas==0.24.2 numpy==1.16 Parsetron rdflib
-
-
 
 # install opencv
 #RUN apt update
@@ -57,7 +67,6 @@ RUN mkdir ~/opencv_build && cd ~/opencv_build && \
     -D BUILD_EXAMPLES=OFF .. >> ../opencv_make && \
     make -j$(nproc) && make install
 
-
 #RUN mkdir /opencv && cd /opencv && \
 #    wget -q -O opencv4_5_1.tar.gz https://github.com/opencv/opencv/archive/4.5.1.tar.gz && \
 #    wget -q -O opencv_contrib_4_5_1.tar.gz https://github.com/opencv/opencv_contrib/archive/4.5.1.tar.gz && \
@@ -69,7 +78,6 @@ RUN mkdir ~/opencv_build && cd ~/opencv_build && \
 #    cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib-4.5.1/modules .. >> ../../cmake_output && \
 #    make -j$(nproc) >> ../../make_output && \
 #    make install
-
 
 #install caffe
 #RUN apt install -y caffe-cpu
@@ -84,9 +92,8 @@ RUN mkdir /caffe && cd /caffe && \
     cmake .. >> ../../cmake_output && \  
     #wget -q -O CaffeConfig.cmake https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/CaffeConfig.cmake && \
     wget -q -O cmake_install.cmake https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/cmake_install.cmake && \
-    make -j8 >> ../../make_output && \
+    make -j$(nproc) >> ../../make_output && \
     make install
-
 
 # create workspace folder
 RUN mkdir -p /workspace/src
@@ -96,7 +103,7 @@ RUN cd /workspace/src && \
     wstool init && \
     wstool merge https://raw.githubusercontent.com/cram2/cram/master/cram-18.04.rosinstall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_resources/robocup/rosinstall.rosinstall -y && \
-    wstool merge https://raw.githubusercontent.com/SUTURO/suturo_planning/robocup/planning_ws.rosinstall -y && \
+    wstool merge https://raw.githubusercontent.com/SUTURO/suturo_planning/robocup/planning_dependency.rosinstall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/dependencies.rosinsall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_knowledge/robocup/dependencies.rosinstall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_navigation/robocup/dependencies.rosinstall -y && \
@@ -113,7 +120,7 @@ RUN cd /workspace/src && \
 RUN cd /workspace/src && wstool update
 
 # install dependencies defined in package.xml
-RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src/suturo_navigation src/suturo_planning src/suturo_manipulation src/suturo_resources --ignore-src -r -y
+RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src/suturo_navigation src/suturo_planning src/suturo_manipulation src/suturo_resources src/suturo_knowledge --ignore-src -r -y
 
 # Add package to start everything
 ADD . /workspace/src
@@ -121,7 +128,7 @@ ADD . /workspace/src
 # compile and install our algorithm
 RUN cd /workspace && \
     /ros_entrypoint.sh catkin build -j1 robosherlock suturo_perception && \
-    /ros_entrypoint.sh catkin build
+    /ros_entrypoint.sh catkin build -j$(nproc)
 
 # command to run the algorithm
-CMD sudo mongod; source /workspace/devel/setup.bash && roslaunch suturo_launch execute_order_66.launch
+CMD sudo mongod --fork --logpath /var/log/mongod.log; source /workspace/devel/setup.bash && roslaunch suturo_launch execute_order_66.launch
