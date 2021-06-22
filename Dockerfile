@@ -27,9 +27,10 @@ RUN apt install -y wget git python-pip python3-pip tree
 RUN apt install -y python-rosinstall
 RUN apt install -y python-wstool
 RUN apt install -y python-catkin-tools
-RUN apt-get update && apt-get install -y cmake g++ unzip libboost-all-dev libopenblas-dev libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler the python-dev libgflags-dev libgoogle-glog-dev liblmdb-dev python-pip python3-pip ros-melodic-desktop-full python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-melodic-roslisp-repl rapidjson-dev automake libxerces-c-dev libicu-dev libapr1-dev mongodb-org openjdk-8-jdk libatlas-base-dev liblapack-dev libblas-dev libmongoclient-dev
-RUN pip install future protobuf tinyrpc==0.9.4 pyzmq pybullet==3.0.6 scipy==1.2.2 casadi sortedcontainers hypothesis==4.34.0 pandas==0.24.2 numpy==1.16
-RUN pip3 install simplenlg http://www.jbox.dk/sling/sling-2.0.0-py3-none-linux_x86_64.whl tinyrpc==0.9.4 pyzmq
+RUN apt-get update && apt-get install -y cmake g++ unzip libboost-all-dev libopenblas-dev libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler the python-dev libgflags-dev libgoogle-glog-dev liblmdb-dev python-pip ros-melodic-desktop-full python-rosdep python-rosinstall python-rosinstall-generator python-wstool build-essential python-rosdep ros-melodic-roslisp-repl rapidjson-dev automake libxerces-c-dev libicu-dev libapr1-dev mongodb-org openjdk-8-jdk libatlas-base-dev liblapack-dev libblas-dev libmongoclient-dev libgoogle-perftools4 libpcap0.8 libstemmer0d libtcmalloc-minimal4 libeigen3-dev libmongoc-dev swi-prolog
+
+RUN pip install future protobuf pybullet==3.0.6 scipy==1.2.2 casadi sortedcontainers hypothesis==4.34.0 pandas==0.24.2 numpy==1.16 Parsetron rdflib
+
 
 
 # install opencv
@@ -41,6 +42,7 @@ RUN apt install -y build-essential cmake git pkg-config libgtk-3-dev \
     libxvidcore-dev libx264-dev libjpeg-dev libpng-dev libtiff-dev \
     gfortran openexr libatlas-base-dev python3-dev python3-numpy \
     libtbb2 libtbb-dev libdc1394-22-dev 
+
 RUN mkdir ~/opencv_build && cd ~/opencv_build && \
     git clone --branch 3.4 https://github.com/opencv/opencv.git && \
     git clone --branch 3.4 https://github.com/opencv/opencv_contrib.git && \
@@ -81,7 +83,7 @@ RUN mkdir /caffe && cd /caffe && \
     cmake .. >> ../../cmake_output && \  
     #wget -q -O CaffeConfig.cmake https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/CaffeConfig.cmake && \
     wget -q -O cmake_install.cmake https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/cmake_install.cmake && \
-    make -j all >> ../../make_output && \
+    make -j8 >> ../../make_output && \
     make install
 
 
@@ -110,7 +112,7 @@ RUN cd /workspace/src && \
 RUN cd /workspace/src && wstool update
 
 # install dependencies defined in package.xml
-RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src --ignore-src -r -y
+RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src/suturo_navigation src/suturo_planning src/suturo_manipulation src/suturo_resources --ignore-src -r -y
 
 # Add package to start everything
 ADD . /workspace/src
