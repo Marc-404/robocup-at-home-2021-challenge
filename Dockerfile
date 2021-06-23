@@ -133,8 +133,9 @@ RUN cd /workspace/src/rs_resources/extracted_feats && \
     wget -q -O BVLC_REF_ClassLabel_ycb_task.txt https://seafile.zfn.uni-bremen.de/f/de0bcd12dc354b37b4ca/?dl=1 && \
     wget -q -O BVLC_REF_data_ycb_task.yaml https://seafile.zfn.uni-bremen.de/f/17fde82611544d80a9ca/?dl=1 && \
     wget -q -O BVLC_REF_ClassLabel_ycb_tool.txt https://seafile.zfn.uni-bremen.de/f/6ec44448f6604dd287c1/?dl=1 && \
-    wget -q -O BVLC_REF_data_ycb_tool.yaml https://seafile.zfn.uni-bremen.de/f/f922ad4cd6ba4f65b941/?dl=1 && \
-    cd ../caffe/models/bvlc_reference_caffenet && \
+    wget -q -O BVLC_REF_data_ycb_tool.yaml https://seafile.zfn.uni-bremen.de/f/f922ad4cd6ba4f65b941/?dl=1
+
+RUN cd /workspace/src/rs_resources/caffe/models/bvlc_reference_caffenet && \
     wget -q -O bvlc_reference_caffenet.caffemodel https://seafile.zfn.uni-bremen.de/f/bc46160b29d840a0836e/?dl=1
 
 # Add package to start everything
