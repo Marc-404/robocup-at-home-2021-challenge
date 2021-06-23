@@ -37,7 +37,7 @@ RUN apt-get update && apt-get install -y cmake g++ unzip libboost-all-dev \
     libatlas-base-dev liblapack-dev libblas-dev libmongoclient-dev \
     libgoogle-perftools4 libpcap0.8 libstemmer0d libtcmalloc-minimal4 \
     libeigen3-dev libmongoc-dev swi-prolog libjson-glib-dev libjson-glib-1.0-0 \
-    ros-melodic-roslisp*
+    ros-melodic-roslisp* ros-melodic-joint-trajectory-action ros-melodic-py-trees
 
 RUN sudo mkdir -p /data/db /data/configdb &&\
     sudo chown -R mongodb:mongodb /data/db /data/configdb
@@ -113,14 +113,17 @@ RUN cd /workspace/src && \
 RUN cd /workspace/src && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_navigation/robocup/workspace.rosinstall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_manipulation/robocup/workspace.rosinstall -y && \
-    wstool merge https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/workspace.rosinstall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_knowledge/robocup/workspace.rosinstall -y && \
     wstool merge https://raw.githubusercontent.com/SUTURO/suturo_planning/robocup/planning_ws.rosinstall -y
 
 RUN cd /workspace/src && wstool update
 
 # install dependencies defined in package.xml
-RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src/suturo_navigation src/suturo_planning src/suturo_manipulation src/suturo_resources src/suturo_knowledge --ignore-src -r -y
+RUN cd /workspace/src && /ros_entrypoint.sh rosdep install --from-paths . --ignore-src -r -y
+
+RUN cd /workspace/src && \
+    wstool merge https://raw.githubusercontent.com/SUTURO/suturo_perception/robocup/workspace.rosinstall -y
+RUN cd /workspace/src && wstool update
 
 # Download model data for classifier
 RUN cd /workspace/src/rs_resources/extracted_feats && \
