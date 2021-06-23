@@ -122,6 +122,21 @@ RUN cd /workspace/src && wstool update
 # install dependencies defined in package.xml
 RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src/suturo_navigation src/suturo_planning src/suturo_manipulation src/suturo_resources src/suturo_knowledge --ignore-src -r -y
 
+# Download model data for classifier
+RUN cd /workspace/src/suturo_perception/rs_resources/extracted_feats && \
+    wget -q -O BVLC_REF_ClassLabel_ycb_food.txt https://seafile.zfn.uni-bremen.de/f/6b2486588606451a8174/?dl=1 && \
+    wget -q -O BVLC_REF_data_ycb_food.yaml https://seafile.zfn.uni-bremen.de/f/be4d1be7ef584d18b884/?dl=1 && \
+    wget -q -O BVLC_REF_ClassLabel_ycb_kitchen.txt https://seafile.zfn.uni-bremen.de/f/160449d41839408bb081/?dl=1 && \
+    wget -q -O BVLC_REF_data_ycb_kitchen.yaml https://seafile.zfn.uni-bremen.de/f/7d81d41a1dd745af838f/?dl=1 && \
+    wget -q -O BVLC_REF_ClassLabel_ycb_shape.txt https://seafile.zfn.uni-bremen.de/f/9cd957f4a50142709fe4/?dl=1 && \
+    wget -q -O BVLC_REF_data_ycb_shape.yaml https://seafile.zfn.uni-bremen.de/f/724d73afda2a4d8488d5/?dl=1 && \
+    wget -q -O BVLC_REF_ClassLabel_ycb_task.txt https://seafile.zfn.uni-bremen.de/f/de0bcd12dc354b37b4ca/?dl=1 && \
+    wget -q -O BVLC_REF_data_ycb_task.yaml https://seafile.zfn.uni-bremen.de/f/17fde82611544d80a9ca/?dl=1 && \
+    wget -q -O BVLC_REF_ClassLabel_ycb_tool.txt https://seafile.zfn.uni-bremen.de/f/6ec44448f6604dd287c1/?dl=1 && \
+    wget -q -O BVLC_REF_data_ycb_tool.yaml https://seafile.zfn.uni-bremen.de/f/f922ad4cd6ba4f65b941/?dl=1 && \
+    cd ../caffe/models/bvlc_reference_caffenet && \
+    wget -q -O bvlc_reference_caffenet.caffemodel https://seafile.zfn.uni-bremen.de/f/bc46160b29d840a0836e/?dl=1
+
 # Add package to start everything
 ADD . /workspace/src
 
