@@ -123,7 +123,7 @@ RUN cd /workspace/src && wstool update
 RUN cd /workspace && /ros_entrypoint.sh rosdep install --from-paths src/suturo_navigation src/suturo_planning src/suturo_manipulation src/suturo_resources src/suturo_knowledge --ignore-src -r -y
 
 # Download model data for classifier
-RUN cd /workspace/src/suturo_perception/rs_resources/extracted_feats && \
+RUN cd /workspace/src/suturo_perception/extracted_feats && \
     wget -q -O BVLC_REF_ClassLabel_ycb_food.txt https://seafile.zfn.uni-bremen.de/f/6b2486588606451a8174/?dl=1 && \
     wget -q -O BVLC_REF_data_ycb_food.yaml https://seafile.zfn.uni-bremen.de/f/be4d1be7ef584d18b884/?dl=1 && \
     wget -q -O BVLC_REF_ClassLabel_ycb_kitchen.txt https://seafile.zfn.uni-bremen.de/f/160449d41839408bb081/?dl=1 && \
