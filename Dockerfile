@@ -154,4 +154,4 @@ RUN cd /workspace && \
     /ros_entrypoint.sh catkin build -j$(nproc)
 
 # command to run the algorithm
-CMD sudo mongod --fork --logpath /var/log/mongod.log; source /workspace/devel/setup.bash rosrun suturo_perception setup_pipeline.py; source /workspace/devel/setup.bash && roslaunch suturo_launch execute_order_66.launch
+CMD sudo mongod --fork --logpath /var/log/mongod.log; source /workspace/devel/setup.bash && roslaunch suturo_launch execute_order_66.launch

@@ -1,6 +1,9 @@
 <launch>
     <arg name="node_start_delay" default="15.0" />  
     <arg name="node_start_delay_2" default="31.0" /> 
+    
+    <node pkg="suturo_perception" type="setup_pipeline.py" name="setup_pipeline" />
+    
     <include file="$(find suturo_bringup)/launch/robocup_bringup.launch" />
     
     <include file="$(find suturo_navigation_launch)/launch/start_suturo_navigation.launch" >
