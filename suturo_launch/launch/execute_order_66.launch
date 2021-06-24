@@ -18,7 +18,7 @@
     
     <include file="$(find knowledge)/launch/knowledge.launch" />
     
-    <node pkg="cleanup_demo" type="execute-cleanup" name="cleanup_imperator" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_2); $0 $@' "/>
+    <node pkg="go_get_it_demo" type="execute-go-get-it" name="gogetit_imperator" output="screen" launch-prefix="bash -c 'sleep $(arg node_start_delay_2); $0 $@' "/>
 
     <node pkg="suturo_launch" type="5_min_killer.py" name="suturo_terminator" />
 </launch>
