@@ -1,20 +1,19 @@
 #!/usr/bin/env python
 import rospy
-from geometry_msgs.msg import Twist
+from move_base_msgs.msg import MoveBaseActionGoal
 import os
-import time
 
 class KillerNode():
     def __init__(self):
         rospy.init_node('suturo_terminator', anonymous=True)
         self.start = False
-        sub = rospy.Subscriber("/hsrb/command_velocity", Twist, self.move_command_cb)
+        sub = rospy.Subscriber("/move_base/goal", MoveBaseActionGoal, self.move_command_cb)
         rospy.spin()
 
     def move_command_cb(self, msg):
         if not self.start:
             self.start = True
-            time.sleep(300)
+            rospy.sleep(300.0)
             os.system("rosnode kill giskard")
 
 if __name__ == '__main__':
