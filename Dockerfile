@@ -149,7 +149,7 @@ ADD . /workspace/src
 
 # compile and install our algorithm
 RUN cd /workspace && \
-    /ros_entrypoint.sh catkin build -j1 robosherlock suturo_perception cram_language suturo_resources && \
+    /ros_entrypoint.sh catkin build -j2 robosherlock suturo_perception cram_language suturo_resources && \
     source /workspace/devel/setup.bash && \
     /ros_entrypoint.sh catkin build -j$(nproc)
 
